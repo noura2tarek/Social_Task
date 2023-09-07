@@ -5,6 +5,7 @@ import 'package:social_app/pages/register/register_bloc/register_cubit.dart';
 import 'package:social_app/pages/register/register_bloc/register_states.dart';
 import '../../Styles/colors.dart';
 import '../../shared/components/components.dart';
+import '../../layout/home_layout.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
@@ -13,37 +14,29 @@ class RegisterScreen extends StatelessWidget {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SocialRegisterCubit(),
-      child: BlocConsumer<SocialRegisterCubit , SocialRegisterStates>(
+      child: BlocConsumer<SocialRegisterCubit, SocialRegisterStates>(
         listener: (context, state) {
-          if (state is SocialRegisterSuccessState) {
-            // if (state.registerModel.status) {
-            //   print(state.registerModel.message);
-            //   CacheHelper.savaData(
-            //     key: 'token',
-            //     value: state.registerModel.data!.token,
-            //   ).then((value) {
-            //     token = state.registerModel.data!.token;
-            //     SocialCubit.get(context).getFavorites();
-            //     SocialCubit.get(context).getUserData();
-            //     SocialCubit.get(context).getHomeData();
-            //     navigateAndRemove(context: context, widget: HomeLayout());
-            //
-            //   });
-            // } else {
-            //   showToast(
-            //     message: state.registerModel.message!,
-            //     state: ToastStates.ERROR,
-            //   );
-            // }
+          //the error may occur if the user entered a used email
+          if (state is SocialCreateUserSuccessState) {
+            navigateAndRemove(
+              context: context,
+              widget: HomeLayout(),
+            );
+          }else if (state is SocialRegisterErrorState) {
+            showToast(
+              message: state.error,
+              state: ToastStates.ERROR,
+            );
           }
         },
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(),
+            appBar: defaultAppBar(context: context),
             body: Padding(
               padding: const EdgeInsets.all(25.0),
               child: Center(
@@ -59,8 +52,9 @@ class RegisterScreen extends StatelessWidget {
                               .textTheme
                               .headlineMedium
                               ?.copyWith(
-                            color: Colors.black,
-                          ),
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                         const SizedBox(
                           height: 30.0,
@@ -88,8 +82,7 @@ class RegisterScreen extends StatelessWidget {
                           label: 'Email Address',
                           inputBorder: OutlineInputBorder(),
                           preficon: Icons.email_outlined,
-                          onSubmit: (value) {
-                          },
+                          onSubmit: (value) {},
                           validator: (String? value) {
                             if (value!.isEmpty) {
                               return 'please enter your email';
@@ -107,7 +100,8 @@ class RegisterScreen extends StatelessWidget {
                           label: 'Password',
                           inputBorder: OutlineInputBorder(),
                           preficon: Icons.lock_outline,
-                          isObsecure: SocialRegisterCubit.get(context).isPassword,
+                          isObsecure:
+                              SocialRegisterCubit.get(context).isPassword,
                           sufficon: SocialRegisterCubit.get(context).icon,
                           suffixPreesed: () {
                             SocialRegisterCubit.get(context)
@@ -145,12 +139,12 @@ class RegisterScreen extends StatelessWidget {
                           condition: state is! SocialRegisterLoadingState,
                           builder: (context) {
                             return defaultButton(
+                              width: double.infinity,
                               text: 'Register',
                               backgroundColor: defaultColor,
                               isUpperCase: true,
                               function: () {
                                 if (formKey.currentState!.validate()) {
-                                  //print(emailController.text);
                                   SocialRegisterCubit.get(context).userRegister(
                                     email: emailController.text,
                                     password: passwordController.text,
@@ -177,9 +171,7 @@ class RegisterScreen extends StatelessWidget {
             ),
           );
         },
-
       ),
     );
-
   }
 }

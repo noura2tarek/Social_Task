@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:social_app/styles/icon_broken.dart';
 
 import '../../styles/colors.dart';
 
@@ -21,14 +22,15 @@ void navigateAndRemove({
     MaterialPageRoute(
       builder: (context) => widget,
     ),
-        (Route<dynamic> route) {
+    (Route<dynamic> route) {
       return false;
     },
   );
 }
 
 Widget defaultButton({
-  double width = double.infinity,
+  required double width,
+  double height = 40.0,
   required Color backgroundColor,
   bool isUpperCase = true,
   double radius = 6.0,
@@ -37,7 +39,7 @@ Widget defaultButton({
 }) =>
     Container(
       width: width,
-      height: 50.0,
+      height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
         color: backgroundColor,
@@ -59,7 +61,33 @@ Widget defaultTextButton({
   required String text,
   required void Function()? function,
 }) =>
-    TextButton(onPressed: function, child: Text(text.toUpperCase()));
+    TextButton(
+        onPressed: function,
+        child: Text(
+          text.toUpperCase(),
+          style: TextStyle(
+            color: defaultColor,
+          ),
+        ));
+
+PreferredSizeWidget defaultAppBar({
+  required BuildContext context,
+  String? title,
+  List<Widget>? actions,
+}) {
+  return AppBar(
+    title: Text(title ?? ''),
+    leading: IconButton(
+      icon: Icon(
+        IconBroken.Arrow___Left_2,
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    ),
+    actions: actions,
+  );
+}
 
 Widget defaultFormField({
   required TextInputType type,
@@ -74,6 +102,7 @@ Widget defaultFormField({
   Color? labelColor,
   Color? hintColor,
   Color? cursorColor,
+  double? cursorHeight,
   Color? prefixColor,
   double? prefixIconSize,
   void Function()? suffixPreesed,
@@ -90,6 +119,9 @@ Widget defaultFormField({
       validator: validator,
       obscureText: isObsecure,
       cursorColor: cursorColor,
+      cursorHeight: cursorHeight,
+      textAlignVertical: TextAlignVertical.center,
+      textAlign: TextAlign.center,
       decoration: InputDecoration(
         fillColor: fillColor,
         labelStyle: TextStyle(
@@ -124,37 +156,42 @@ void showToast({
 }) {
   Fluttertoast.showToast(
     msg: message,
-    toastLength: Toast.LENGTH_LONG,
+    toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.BOTTOM,
-    timeInSecForIosWeb: 3,
+    timeInSecForIosWeb: 2,
     backgroundColor: chooseToastColor(state),
     textColor: Colors.white,
     fontSize: 16.0,
   );
 }
-enum ToastStates{ SUCCESS, WAENING, ERROR, }
 
-Color chooseToastColor(ToastStates state){
+enum ToastStates { SUCCESS, WAENING, ERROR, NOTIFY }
+
+Color chooseToastColor(ToastStates state) {
   late Color color;
-  switch(state){
+  switch (state) {
     case ToastStates.SUCCESS:
-      color= Colors.green;
+      color = Colors.green;
       break;
     case ToastStates.WAENING:
-      color= Colors.amber;
+      color = Colors.amber;
       break;
     case ToastStates.ERROR:
-      color= Colors.red;
+      color = Colors.red;
+      break;
+    case ToastStates.NOTIFY:
+      color = Colors.grey;
       break;
   }
   return color;
 }
 
-Widget myDivider(){
-  return const Divider(
-    height: 1,
+Widget myDivider() {
+  return  Divider(
+    height: 1.0,
     indent: 15.0,
     endIndent: 15.0,
+    color: Colors.grey[350],
   );
 }
 
@@ -176,7 +213,7 @@ Widget buildProductList(model, BuildContext context, {bool isSearch = false}) {
                 width: 120.0,
                 height: 120.0,
               ),
-              if ((isSearch = false) &&  model.discount != 0 )
+              if ((isSearch = false) && model.discount != 0)
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   color: Colors.yellow,
@@ -187,7 +224,6 @@ Widget buildProductList(model, BuildContext context, {bool isSearch = false}) {
                     ),
                   ),
                 ),
-
             ],
           ),
           const SizedBox(
@@ -219,7 +255,7 @@ Widget buildProductList(model, BuildContext context, {bool isSearch = false}) {
                     const SizedBox(
                       width: 5.0,
                     ),
-                    if ((isSearch = false) &&  model.discount != 0 )
+                    if ((isSearch = false) && model.discount != 0)
                       Text(
                         '${model.oldPrice}',
                         maxLines: 1,
@@ -236,8 +272,7 @@ Widget buildProductList(model, BuildContext context, {bool isSearch = false}) {
                       },
                       tooltip: 'Delete from favourites',
                       icon: CircleAvatar(
-
-                       // backgroundColor: SocialCubit.get(context).favouritesProductsId.contains(model.id)? Colors.blue : Colors.grey ,
+                        // backgroundColor: SocialCubit.get(context).favouritesProductsId.contains(model.id)? Colors.blue : Colors.grey ,
                         radius: 15.0,
                         child: Icon(
                           Icons.favorite_border,
@@ -256,7 +291,3 @@ Widget buildProductList(model, BuildContext context, {bool isSearch = false}) {
     ),
   );
 }
-
-
-
-

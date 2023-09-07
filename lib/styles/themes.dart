@@ -5,7 +5,9 @@ import 'package:hexcolor/hexcolor.dart';
 import 'colors.dart';
 
 ThemeData darkTheme = ThemeData(
-  primarySwatch: Colors.blue,
+  useMaterial3: true,
+  colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey[200]!, primary:defaultColor , primaryContainer: Colors.white),
+  primarySwatch: defaultColor,
   dividerTheme: DividerThemeData(
     color: Colors.grey[200],
   ),
@@ -27,12 +29,17 @@ ThemeData darkTheme = ThemeData(
   ),
   scaffoldBackgroundColor: HexColor('333739'),
 
-  textTheme: const TextTheme(
+  textTheme:  TextTheme(
       bodySmall: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 18.0,
         color: Colors.white,
-      )
+      ),
+    titleMedium: TextStyle(
+      height: 1.3,
+      fontSize: 14.0,
+      color: Colors.white,
+    ),
   ),
   appBarTheme: AppBarTheme(
       titleTextStyle: const TextStyle(
@@ -63,25 +70,37 @@ ThemeData darkTheme = ThemeData(
 );
 
 ThemeData lightTheme =  ThemeData(
-  primarySwatch: Colors.blue,
+  useMaterial3: true,
+  colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey[200]!, primary:defaultColor , primaryContainer: Colors.white),
+  primarySwatch: defaultColor,
   primaryColor: Colors.indigo,
   dividerTheme: DividerThemeData(
     color: Colors.grey[400],
   ),
   scaffoldBackgroundColor: Colors.white,
-  textTheme: const TextTheme(
-    bodySmall: TextStyle(
-      //fontWeight: FontWeight.bold,
-      //fontSize: 13.0,
+  textTheme:  TextTheme(
+
+    // bodyMedium: TextStyle(
+    //   //fontWeight: FontWeight.normal,
+    //   fontSize: 22.0,
+    //   color: Colors.black,
+    //   fontFamily: 'Jannah',
+    // ),
+    titleMedium: TextStyle(
+      height: 1.3,
+      fontSize: 14.0,
       color: Colors.black,
+      fontFamily: 'Jannah',
+      //fontWeight: FontWeight.normal,
     ),
   ),
-  appBarTheme: const AppBarTheme(
+  appBarTheme:  AppBarTheme(
       titleSpacing: 16.0,
       titleTextStyle: TextStyle(
+        fontFamily: "Jannah",
         color: Colors.black,
-        fontSize: 20.0,
-        fontWeight: FontWeight.bold,
+        fontSize: 22.0,
+        fontWeight: FontWeight.w700,
       ),
       iconTheme: IconThemeData(
         color: Colors.black,
@@ -98,7 +117,7 @@ ThemeData lightTheme =  ThemeData(
     selectedItemColor: defaultColor,
     showUnselectedLabels: true,
     showSelectedLabels: true,
-    elevation: 20.0,
+    elevation: 15.0,
     backgroundColor: Colors.white,
   ),
   fontFamily: 'Jannah',
