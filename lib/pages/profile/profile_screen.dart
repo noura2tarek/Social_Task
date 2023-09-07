@@ -2,12 +2,12 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/Styles/colors.dart';
-import 'package:social_app/edit_profile/edit_profile_screen.dart';
 import 'package:social_app/pages/login/login_screen.dart';
 import 'package:social_app/shared/bloc/cubit.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/styles/icon_broken.dart';
 import '../../shared/bloc/states.dart';
+import '../edit_profile/edit_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
