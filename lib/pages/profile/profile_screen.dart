@@ -2,15 +2,17 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/Styles/colors.dart';
-import 'package:social_app/pages/login/login_screen.dart';
+import 'package:social_app/pages/new_post/new_post_screen.dart';
 import 'package:social_app/shared/bloc/cubit.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/styles/icon_broken.dart';
 import '../../shared/bloc/states.dart';
 import '../edit_profile/edit_profile_screen.dart';
+import '../settings/settings_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({Key? key, this.userVisitId}) : super(key: key);
+  final String? userVisitId;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class ProfileScreen extends StatelessWidget {
                               image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: NetworkImage(
-                                  model!.coverImage,
+                                  model!.coverImage!,
                                 ),
                               ),
                             ),
@@ -49,11 +51,11 @@ class ProfileScreen extends StatelessWidget {
                           child: CircleAvatar(
                             radius: 61.0,
                             backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
+                                Theme.of(context).scaffoldBackgroundColor,
                             child: CircleAvatar(
                               radius: 58.0,
                               backgroundImage: NetworkImage(
-                                model.image,
+                                model.image!,
                               ),
                             ),
                           ),
@@ -65,22 +67,15 @@ class ProfileScreen extends StatelessWidget {
                     height: 5.0,
                   ),
                   Text(
-                    model.name,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 20.0,
-                      color: Colors.black,
-                      fontFamily: 'Jannah',
-                    ),
+                    model.name!,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(
                     height: 6.0,
                   ),
                   Text(
-                    model.bio, //use bodySmall instead of caption
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color:  Colors.grey,
-                    ),
+                    model.bio!, //use bodySmall instead of caption
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(
                     height: 28.0,
@@ -99,11 +94,7 @@ class ProfileScreen extends StatelessWidget {
                                   '${model.noOfPosts}',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .titleSmall
-                                      ?.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 17.0,
-                                  ),
+                                      .titleSmall,
                                 ),
                                 Text(
                                   'Posts',
@@ -111,8 +102,10 @@ class ProfileScreen extends StatelessWidget {
                                       .textTheme
                                       .bodySmall
                                       ?.copyWith(
-                                    color: Colors.grey,
-                                  ),
+                                        color: SocialCubit.get(context).isDark? Colors.grey :Colors.black87.withOpacity(0.7),
+                                        //change color here according to theme mode
+                                        fontSize: 15.0,
+                                      ),
                                 ),
                               ],
                             ),
@@ -127,11 +120,7 @@ class ProfileScreen extends StatelessWidget {
                                   '${model.noOfFollowers}',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .titleSmall
-                                      ?.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 17.0,
-                                  ),
+                                      .titleSmall,
                                 ),
                                 Text(
                                   'Followers',
@@ -139,8 +128,9 @@ class ProfileScreen extends StatelessWidget {
                                       .textTheme
                                       .bodySmall
                                       ?.copyWith(
-                                    color: Colors.grey,
-                                  ),
+                                        color: SocialCubit.get(context).isDark? Colors.grey :Colors.black87.withOpacity(0.7),
+                                        fontSize: 15.0,
+                                      ),
                                 ),
                               ],
                             ),
@@ -155,11 +145,7 @@ class ProfileScreen extends StatelessWidget {
                                   '${model.noOfFollowing}',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .titleSmall
-                                      ?.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 17.0,
-                                  ),
+                                      .titleSmall,
                                 ),
                                 Text(
                                   'Following',
@@ -167,8 +153,9 @@ class ProfileScreen extends StatelessWidget {
                                       .textTheme
                                       .bodySmall
                                       ?.copyWith(
-                                    color: Colors.grey,
-                                  ),
+                                        color: SocialCubit.get(context).isDark? Colors.grey :Colors.black87.withOpacity(0.7),
+                                        fontSize: 15.0,
+                                      ),
                                 ),
                               ],
                             ),
@@ -183,11 +170,7 @@ class ProfileScreen extends StatelessWidget {
                                   '${model.noOfFriends}',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .titleSmall
-                                      ?.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 17.0,
-                                  ),
+                                      .titleSmall,
                                 ),
                                 Text(
                                   'Friends',
@@ -195,8 +178,9 @@ class ProfileScreen extends StatelessWidget {
                                       .textTheme
                                       .bodySmall
                                       ?.copyWith(
-                                    color: Colors.grey,
-                                  ),
+                                        color: SocialCubit.get(context).isDark? Colors.grey :Colors.black87.withOpacity(0.7),
+                                        fontSize: 15.0,
+                                      ),
                                 ),
                               ],
                             ),
@@ -207,18 +191,21 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsetsDirectional.only(
-                        bottom: 10.0, end: 15.0, start: 15.0),
+                        bottom: 8.0, end: 15.0, start: 15.0),
                     child: Row(
                       children: [
                         Expanded(
                           child: OutlinedButton(
                             child: Text(
-                              'Add Photos',
+                              'Add Photo / Post',
                               style: TextStyle(
                                 color: defaultColor,
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              navigateTo(
+                                  context: context, widget: NewPostScreen());
+                            },
                           ),
                         ),
                         const SizedBox(
@@ -229,67 +216,71 @@ class ProfileScreen extends StatelessWidget {
                             navigateTo(
                                 context: context, widget: EditProfileScreen());
                           },
-                          child: Icon(
-                            IconBroken.Edit,
-                            color: defaultColor,
-                          ),
+                          child: const Text('Edit Profile'),
                         ),
                       ],
                     ),
                   ),
                   OutlinedButton(
-                    child: Text(
-                      'Edit Email',
-                      style: TextStyle(
-                        color: defaultColor,
-                      ),
-                    ),
                     onPressed: () {
-                      // FirebaseAuth.instance.currentUser?.updateEmail('nourat536@gmail.com').then((value) {
-                      //   print('updated sucessfully');
-                      // });
+                      navigateTo(context: context, widget: SettingsScreen());
                     },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(IconBroken.Setting),
+                        const SizedBox(
+                          width: 5.0,
+                        ),
+                        const Text('Settings'),
+                      ],
+                    ),
                   ),
-                  const SizedBox(
-                    height: 60.0,
-                  ),
-                  /********      log out button    **********/
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                        bottom: 10.0, end: 15.0, start: 15.0),
-                    child: InkWell(
-                      onTap: () {
-                        SocialCubit.get(context)
-                            .logOut(context: context, widget: LoginScreen());
-                      },
+                  if (SocialCubit.get(context).userPosts.isNotEmpty)
+                    Align(
+                      alignment: AlignmentDirectional.topStart,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              IconBroken.Logout,
-                              size: 24.0,
-                              color: Colors.redAccent,
-                            ),
-                            const SizedBox(width: 8.0),
-                            Text(
-                              'Log out',
-                              style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Colors.redAccent,
-                                fontSize: 15.0,
-                              ),
-                            ),
-                          ],
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          'Posts',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontSize: 20.0,
+                                  ),
                         ),
                       ),
                     ),
+                  if (SocialCubit.get(context).userPosts.isNotEmpty)
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                  if (SocialCubit.get(context).userPosts.isNotEmpty)
+                    ListView.separated(
+                      itemCount: SocialCubit.get(context).userPosts.length,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return buildPostItem(
+                          context: context,
+                          model: SocialCubit.get(context).userPosts[index],
+                          index: index,
+                        );
+                      },
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 8.0,
+                      ),
+                    ),
+                  const SizedBox(
+                    height: 10.0,
                   ),
                 ],
               ),
             );
           },
-          fallback: (context) => const Center(child: CircularProgressIndicator()),
+          fallback: (context) =>
+              const Center(child: CircularProgressIndicator()),
         );
       },
     );

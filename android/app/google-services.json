@@ -28,7 +28,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC00m_F_P8e-yFQzlJX37vytGukFZ95Uxg"
+          "current_key": "AIzaSyAZLAGITo1wjl7DaOD_f8JToM_XGRSx4kw"
         }
       ],
       "services": {
@@ -37,6 +37,13 @@
             {
               "client_id": "104644941726-edrk1f9j78m765pu0si5qmjar3ef0ufj.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "104644941726-0jv8dtsaee2eh0qsmibd3d1adejprbus.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.socialApp"
+              }
             }
           ]
         }

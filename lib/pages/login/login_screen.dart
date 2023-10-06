@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/network/local/cache_helper.dart';
 import 'package:social_app/shared/bloc/cubit.dart';
 import 'package:social_app/shared/constants/constants.dart';
-import 'package:social_app/styles/icon_broken.dart';
+
 
 import '../../shared/components/components.dart';
 import '../../styles/colors.dart';
@@ -31,11 +31,13 @@ class LoginScreen extends StatelessWidget {
               value: state.uId,
             ).then((value) {
               uId = state.uId;
-              SocialCubit.get(context).getUserData().then((value) {
-                navigateAndRemove(
-                  context: context,
-                  widget: HomeLayout(),
-                );
+              SocialCubit.get(context).getUserData(userId: state.uId).then((value) {
+                SocialCubit.get(context).getPosts().then((value) {
+                  navigateAndRemove(
+                    context: context,
+                    widget: HomeLayout(),
+                  );
+                });
               });
             });
           } else if (state is SocialLoginErrorState) {

@@ -5,12 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/models/user_model.dart';
 import 'package:social_app/pages/register/register_bloc/register_states.dart';
 
+
 class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
   SocialRegisterCubit() : super(SocialRegisterInitialState());
 
   static SocialRegisterCubit get(context) => BlocProvider.of(context);
   bool isPassword = true;
+  bool isCheckPassword = true;
   IconData icon = Icons.visibility_outlined;
+  IconData confirmIcon = Icons.visibility_outlined;
 
   //method to register user by firebase Auth
   void userRegister({
@@ -28,7 +31,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
         name: name,
         email: email,
         phone: phone,
-        uId: value.user!.uid,
+        usId: value.user!.uid,
         isEmailVerified: false,
       );
       //emit(SocialRegisterSuccessState());
@@ -43,14 +46,14 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
         required String name,
         required String email,
         required String phone,
-        required String uId,
+        required String usId,
         required bool isEmailVerified,
       }){
     UserModel model = UserModel(
       name: name,
       email: email,
       phone: phone,
-      uId: uId,
+      uId: usId,
       isEmailVerified: isEmailVerified,
       image: 'https://cdn.landesa.org/wp-content/uploads/default-user-image.png',
       coverImage: 'https://img.freepik.com/free-photo/full-shot-woman-running-outdoors_23-2149622958.jpg?t=st=1693073648~exp=1693074248~hmac=c0db97a92eb3f7fbf1f39ed5e020ba5a3ecba60d9f00d8eee5386f173c13080a',
@@ -59,13 +62,14 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
       noOfFollowers: 0,
       noOfFollowing: 0,
       noOfFriends: 0,
+      //userPosts: null,
     );
      FirebaseFirestore.instance
          .collection('users')
-         .doc(uId)
+         .doc(usId)
          .set(model.toMap())
          .then((value) {
-          emit(SocialCreateUserSuccessState());
+          emit(SocialCreateUserSuccessState(usId));
      }).catchError((error){
         emit(SocialCreateUserErrorState(error.toString()));
      });
@@ -77,6 +81,13 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
     isPassword = !isPassword;
     icon =
     isPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined;
+    emit(SocialRegChangePasswordVisibilityState());
+  }
+  //change confirm password visibility
+  void changeConfirmPasswordVisibility() {
+    isCheckPassword = !isCheckPassword;
+    confirmIcon =
+    isCheckPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined;
     emit(SocialRegChangePasswordVisibilityState());
   }
 }

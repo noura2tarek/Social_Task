@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/pages/register/register_bloc/register_cubit.dart';
 import 'package:social_app/pages/register/register_bloc/register_states.dart';
+import 'package:social_app/shared/bloc/cubit.dart';
 import '../../Styles/colors.dart';
+import '../../network/local/cache_helper.dart';
 import '../../shared/components/components.dart';
 import '../../layout/home_layout.dart';
 
@@ -11,6 +13,7 @@ class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -23,10 +26,21 @@ class RegisterScreen extends StatelessWidget {
         listener: (context, state) {
           //the error may occur if the user entered a used email
           if (state is SocialCreateUserSuccessState) {
-            navigateAndRemove(
-              context: context,
-              widget: HomeLayout(),
-            );
+            CacheHelper.savaData(
+              key: 'uId',
+              value: state.userId,
+            ).then((value) {
+              SocialCubit.get(context).getUserData(userId: state.userId).then((value) {
+                SocialCubit.get(context).getPosts().then((value) {
+                  navigateAndRemove(
+                    context: context,
+                    widget: HomeLayout(),
+                  );
+                });
+              });
+            });
+
+
           }else if (state is SocialRegisterErrorState) {
             showToast(
               message: state.error,
@@ -74,7 +88,7 @@ class RegisterScreen extends StatelessWidget {
                           },
                         ),
                         const SizedBox(
-                          height: 15.0,
+                          height: 24.0,
                         ),
                         defaultFormField(
                           type: TextInputType.emailAddress,
@@ -92,7 +106,7 @@ class RegisterScreen extends StatelessWidget {
                           },
                         ),
                         const SizedBox(
-                          height: 30.0,
+                          height: 24.0,
                         ),
                         defaultFormField(
                           type: TextInputType.visiblePassword,
@@ -109,14 +123,39 @@ class RegisterScreen extends StatelessWidget {
                           },
                           validator: (String? value) {
                             if (value!.isEmpty) {
-                              return 'password is too short';
+                              return 'password must not be empty';
                             } else {
                               return null;
                             }
                           },
                         ),
                         const SizedBox(
-                          height: 30.0,
+                          height: 24.0,
+                        ),
+                        defaultFormField(
+                          type: TextInputType.visiblePassword,
+                          controller: confirmPasswordController,
+                          label: 'Confirm Password',
+                          inputBorder: OutlineInputBorder(),
+                          preficon: Icons.lock_outline,
+                          isObsecure: SocialRegisterCubit.get(context).isCheckPassword,
+                          sufficon: SocialRegisterCubit.get(context).confirmIcon,
+                          suffixPreesed: () {
+                            SocialRegisterCubit.get(context)
+                                .changeConfirmPasswordVisibility();
+                          },
+                          validator: (String? value) {
+                            if (value!.isEmpty) {
+                              return "passwords don't match";
+                            } else if(passwordController.text != confirmPasswordController.text){
+                              return "passwords don't match";
+                            } else{
+                              return null;
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 24.0,
                         ),
                         defaultFormField(
                           type: TextInputType.phone,
@@ -127,7 +166,9 @@ class RegisterScreen extends StatelessWidget {
                           validator: (String? value) {
                             if (value!.isEmpty) {
                               return 'please enter your phone';
-                            } else {
+                            } else if(value.length != 11){
+                              return 'please enter valid phone number';
+                            } else{
                               return null;
                             }
                           },

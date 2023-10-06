@@ -5,6 +5,8 @@ import 'package:social_app/shared/bloc/cubit.dart';
 import 'package:social_app/shared/bloc/states.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/styles/icon_broken.dart';
+
+import '../shared/constants/constants.dart';
 class HomeLayout extends StatelessWidget {
   const HomeLayout({Key? key}) : super(key: key);
 
@@ -26,7 +28,7 @@ class HomeLayout extends StatelessWidget {
         var cubit = SocialCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            title: Text(cubit.titles[cubit.currentIndex]),
+            title: Text(cubit.titles[savedCurrentIndex]),
             actions: [
               IconButton(
                   onPressed: () {},
@@ -38,9 +40,9 @@ class HomeLayout extends StatelessWidget {
               ),
             ],
           ),
-          body: cubit.screens[cubit.currentIndex],
+          body: cubit.screens[savedCurrentIndex],
           bottomNavigationBar: BottomNavigationBar(
-            currentIndex: cubit.currentIndex,
+            currentIndex: savedCurrentIndex,
             items: [
               BottomNavigationBarItem(
                 icon: Icon(

@@ -8,8 +8,8 @@ import 'package:social_app/styles/icon_broken.dart';
 
 import '../../shared/components/components.dart';
 
-class NewPostScreen extends StatelessWidget {
-   NewPostScreen({Key? key}) : super(key: key);
+class EditPostScreen extends StatelessWidget {
+  EditPostScreen({Key? key}) : super(key: key);
   final textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -108,7 +108,7 @@ class NewPostScreen extends StatelessWidget {
                                   cubit.removePostImage();
                                 },
                                 splashRadius: 21.0,
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.close,
                                   color: Colors.white,
                                   size: 20.0,

@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-
+//shared preference (local database)
 class CacheHelper {
   static late SharedPreferences sharedPreferences;
 
@@ -18,8 +18,11 @@ class CacheHelper {
       return await sharedPreferences.setInt(key, value);
     } else if (value is bool) {
       return await sharedPreferences.setBool(key, value);
-    } else {
+    } else if (value is double){
       return await sharedPreferences.setDouble(key, value);
+    }
+    else{
+      return await sharedPreferences.setStringList(key, value);
     }
   }
 //get data with a certain key
@@ -37,6 +40,7 @@ class CacheHelper {
   static bool? getBoolean({required String key}) {
     return sharedPreferences.getBool(key);
   }
+
   //remove data with a certain key
   static Future<bool> removeData({required String key}) async{
    return await sharedPreferences.remove(key);

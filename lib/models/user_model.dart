@@ -1,16 +1,18 @@
+
 class UserModel {
-  late String name;
-  late String email;
-  late String phone;
-  late String uId;
-  late String image;
-  late String coverImage;
-  late String bio;
-  late bool isEmailVerified;
-  late int noOfPosts;
-  late int noOfFollowers;
-  late int noOfFollowing;
-  late int noOfFriends;
+  String? name;
+  String? email;
+  String? phone;
+  String? uId;
+  String? image;
+  String? coverImage;
+  String? bio;
+  bool? isEmailVerified;
+  int? noOfPosts;
+ // List<PostModel>? userPosts;
+  int? noOfFollowers;
+  int? noOfFollowing;
+  int? noOfFriends;
 
   UserModel({
     required this.name,
@@ -22,6 +24,7 @@ class UserModel {
     required this.bio,
     required this.isEmailVerified,
     required this.noOfPosts,
+    //this.userPosts,
     required this.noOfFollowers,
     required this.noOfFollowing,
     required this.noOfFriends,
@@ -37,6 +40,9 @@ class UserModel {
     bio = json?['bio'];
     isEmailVerified = json?['isEmailVerified'];
     noOfPosts = json?['noOfPosts'];
+    // json?['userPosts'].forEach((element) {
+    //   userPosts?.add(PostModel.fromJson(element));
+    // });
     noOfFollowers = json?['noOfFollowers'];
     noOfFollowing = json?['noOfFollowing'];
     noOfFriends = json?['noOfFriends'];
@@ -48,15 +54,15 @@ class UserModel {
       'bio': bio,
       'email': email,
       'phone': phone,
-      'uId' : uId,
-      'image' : image,
+      'uId': uId,
+      'image': image,
       'coverImage': coverImage,
       'isEmailVerified': isEmailVerified,
       'noOfPosts': noOfPosts,
+      //'userPosts': userPosts,
       'noOfFollowers': noOfFollowers,
       'noOfFollowing': noOfFollowing,
       'noOfFriends': noOfFriends,
-
     };
   }
 }
