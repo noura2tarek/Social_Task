@@ -1,0 +1,47 @@
+class AppStrings {
+  static const userIdKey = 'uId';
+  static const appTitle = 'Social App';
+  static const register = 'Register';
+  static const isDarkKey = 'isDark';
+  static const login = 'Login';
+  static const password = 'Password';
+  static const name = 'Name';
+  static const phone = 'Phone';
+  static const home = 'Home';
+  static const chats = 'Chats';
+  static const post = 'post';
+  static const posts = 'posts';
+  static const like = 'like';
+  static const likes = 'likes';
+  static const users = 'users';
+  static const usersc = 'Users';
+  static const settings = 'Settings';
+  static const messages = 'messages';
+  static const newsFeed = 'News Feed';
+  static const addPost = 'Add Post';
+  static const userName = 'userName';
+  static const profile = 'Profile';
+  static const dateTime = 'dateTime';
+  static const usersPhotos = 'usersPhotos';
+  static const postsPhotos = 'postsPhotos';
+  static const emailAddress = 'Email Address';
+  static const verifyEmail = 'Verify Email';
+  static const confirmPassword = 'Confirm Password';
+  static const writeYourBio = 'write your bio..';
+  static const noPostsYet = 'No Posts Yet';
+  static const noImageSelected = 'No Image Selected';
+  static const checkMail = 'check your mail';
+  static const passwordMatch = "passwords don't match";
+  static const enterEmail = 'please enter your email address';
+  static const pleaseVerifyEmail = 'Please Verify Your Email';
+  static const enterName = 'please enter your name';
+  static const enterPhone = 'please enter your phone';
+  static const validPhone = 'please enter valid phone number';
+  static const loginWithGoggle = 'Login With Goggle';
+  static const dontHaveAccount = "Don\'t have an account?";
+  static const haveAccount = 'Already have an account?';
+  static const emptyPassword = 'password can\'t be blank';
+  static const savedCurrentIndexKey = 'savedCurrentIndex';
+  static const checkInternet =
+      'No Internet Connection, check internet and try again';
+}

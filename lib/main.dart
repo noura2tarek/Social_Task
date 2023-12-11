@@ -1,102 +1,67 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:social_app/core/controllers/login_bloc/login_cubit.dart';
+import 'package:social_app/core/controllers/register_bloc/register_cubit.dart';
+import 'package:social_app/core/managers/app_strings.dart';
 import 'package:social_app/layout/home_layout.dart';
-import 'package:social_app/pages/login/login_screen.dart';
-import 'package:social_app/shared/bloc/cubit.dart';
-import 'package:social_app/shared/bloc/states.dart';
-import 'package:social_app/shared/bloc_observer.dart';
-import 'package:social_app/shared/components/components.dart';
-import 'package:social_app/shared/constants/constants.dart';
-import 'package:social_app/styles/themes.dart';
-import 'package:social_app/visit_profile/visit_profile_cubit/visit_profile_cubit.dart';
-import 'network/local/cache_helper.dart';
+import 'package:social_app/screens/modules/login/login_screen.dart';
+import 'core/controllers/bloc_observer.dart';
+import 'core/controllers/bloc/cubit.dart';
+import 'core/controllers/bloc/states.dart';
+import 'core/controllers/visit_profile_bloc/visit_profile_cubit.dart';
+import 'core/managers/values.dart';
+import 'core/network/local/cache_helper.dart';
+import 'core/styles/themes/theme_data_dark.dart';
+import 'core/styles/themes/theme_data_light.dart';
 
-//Handle background message (the app is closed or the app is running in the background)
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
-  showToast(message: "Background message", state: ToastStates.SUCCESS);
-}
-
-Future<void> main() async {
+Future<void> main()  async {
   WidgetsFlutterBinding.ensureInitialized();
-  //check internet
-  bool result = await InternetConnectionChecker().hasConnection;
-  if (result == true) {
-    return;
-  } else {
-    showToast(
-        message: 'No Internet Connection, check internet and try again',
-        state: ToastStates.NOTIFY);
-  }
 
-  await Firebase.initializeApp();
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  // //check internet
+  // bool result = await InternetConnectionChecker().hasConnection;
+  // if (result == true) {
+  //   return;
+  // } else {
+  //   showToast(message: AppStrings.checkInternet, state: ToastStates.NOTIFY);
+  // }
 
-// use the returned token to send messages to users from your custom server
-  String? token = await messaging.getToken();
-  print('token is $token');
-  //token is c0tM5SrMRcqXZPJJafAGoN:APA91bEYitQWQL4XumxyXXb4zJsCmMIWMhEx4dRShuXzVfLr6gvnDG2Z2awqYu9ny0k1Gz-hkTdINwocJdE_59bbjJuP9z7eyIpy05ZNynTjZDShE5wWLHlkt6AuB9itHlgNdfKEcDXM
 
-  // Handle foreground messages (notification)
-  //To listen to messages while your application is in the foreground (you are opening the application)
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message in the foreground!');
-    print('Message data: ${message.data}');
-    showToast(message: "on message", state: ToastStates.SUCCESS);
-    // if (message.notification != null) {
-    //   print('Message also contained a notification: ${message.notification.toString()}');
-    // }
-  });
-
-  //Handle a message when the user clicked on the notification  (the app is running in the background)
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('On MessageOpened App!');
-    print('Message data: ${message.data}');
-    showToast(message: "On message opened app", state: ToastStates.SUCCESS);
-    // if (message.notification != null) {
-    //   print('Message also contained a notification: ${message.notification.toString()}');
-    // }
-  });
-
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-  Bloc.observer = MyBlocObserver();
+ Bloc.observer = MyBlocObserver();
   await CacheHelper.init();
-  if (CacheHelper.checkData(key: 'uId')) {
-    uId = CacheHelper.getData(key: 'uId') as String;
+  if (CacheHelper.checkData(key: AppStrings.userIdKey)) {
+    uId = CacheHelper.getData(key: AppStrings.userIdKey) as String;
   } else {
     uId = null;
   }
-//
-  if (CacheHelper.checkData(key: 'savedCurrentIndex')) {
-    savedCurrentIndex = CacheHelper.getData(key: 'savedCurrentIndex') as int;
+
+  if (CacheHelper.checkData(key: AppStrings.savedCurrentIndexKey)) {
+    savedCurrentIndex =
+        CacheHelper.getData(key: AppStrings.savedCurrentIndexKey) as int;
   }
 
-  bool? isDarkTheme = CacheHelper.getBoolean(key: 'isDark');
-  Widget widget;
+  bool? isDarkTheme = CacheHelper.getBoolean(key: AppStrings.isDarkKey);
 
   if (uId != null) {
-    widget = HomeLayout();
+    startingWidget = HomeLayout();
   } else {
-    widget = LoginScreen();
+    startingWidget = LoginScreen();
   }
 
+  // Initialize firebase
+  await Firebase.initializeApp();
+
   runApp(MyApp(
-    startWidget: widget,
     isDarkk: isDarkTheme,
   ));
 }
 
 class MyApp extends StatelessWidget {
-  final Widget startWidget;
   final bool? isDarkk;
 
-  MyApp({super.key, required this.startWidget, required this.isDarkk});
+  MyApp({super.key, required this.isDarkk});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -111,19 +76,23 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => VisitCubit(),
         ),
+        BlocProvider(
+          create: (context) => SocialLoginCubit(),
+        ),
+        BlocProvider(
+          create: (context) => SocialRegisterCubit(),
+        ),
       ],
       child: BlocConsumer<SocialCubit, SocialStates>(
         listener: (context, state) {},
         builder: (context, state) {
           return MaterialApp(
-            //title: 'Flutter Demo',
+            title: AppStrings.appTitle,
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             darkTheme: darkTheme,
-            themeMode: SocialCubit.get(context).isDark
-                ? ThemeMode.dark
-                : ThemeMode.light,
-            home: startWidget,
+            themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+            home: startingWidget,
           );
         },
       ),

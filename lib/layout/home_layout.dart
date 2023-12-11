@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/pages/new_post/new_post_screen.dart';
-import 'package:social_app/shared/bloc/cubit.dart';
-import 'package:social_app/shared/bloc/states.dart';
-import 'package:social_app/shared/components/components.dart';
-import 'package:social_app/styles/icon_broken.dart';
+import 'package:social_app/core/managers/app_strings.dart';
+import '../core/controllers/bloc/cubit.dart';
+import '../core/controllers/bloc/states.dart';
+import '../core/managers/lists.dart';
+import '../core/managers/values.dart';
+import '../core/styles/icon_broken.dart';
+import '../screens/modules/new_post/new_post_screen.dart';
+import '../screens/widgets/components.dart';
 
-import '../shared/constants/constants.dart';
 class HomeLayout extends StatelessWidget {
   const HomeLayout({Key? key}) : super(key: key);
 
@@ -16,7 +18,7 @@ class HomeLayout extends StatelessWidget {
       listener: (context, state) {
         if (state is SocialGetUserErrorState) {
           showToast(
-              message: 'check your internet connection',
+              message: AppStrings.checkInternet,
               state: ToastStates.NOTIFY);
         }
         if(state is SocialAddPostState){
@@ -28,51 +30,46 @@ class HomeLayout extends StatelessWidget {
         var cubit = SocialCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            title: Text(cubit.titles[savedCurrentIndex]),
+            title: Text(screensTitles[savedCurrentIndex]),
             actions: [
               IconButton(
                   onPressed: () {},
-                  icon: Icon(IconBroken.Notification),
+                  icon: const Icon(IconBroken.Notification),
               ),
               IconButton(
                   onPressed: () {},
-                  icon: Icon(IconBroken.Search),
+                  icon: const Icon(IconBroken.Search),
               ),
             ],
           ),
-          body: cubit.screens[savedCurrentIndex],
+          body: screens[savedCurrentIndex],
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: savedCurrentIndex,
-            items: [
+            items: const [
               BottomNavigationBarItem(
                 icon: Icon(
                   IconBroken.Home,
                 ),
-                label: 'Home',
+                label: AppStrings.home,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  IconBroken.Chat,
-                ),
-                label: 'Chats',
-              ),
+
               BottomNavigationBarItem(
                 icon: Icon(
                   IconBroken.Paper_Upload,
                 ),
-                label: 'Post',
+                label: AppStrings.post,
               ),
               BottomNavigationBarItem(
                 icon: Icon(
                   IconBroken.Location,
                 ),
-                label: 'Users',
+                label: AppStrings.users,
               ),
               BottomNavigationBarItem(
                 icon: Icon(
                   IconBroken.Profile
                 ),
-                label: 'Profile',
+                label: AppStrings.profile,
               ),
             ],
             onTap: (index) {
@@ -85,44 +82,3 @@ class HomeLayout extends StatelessWidget {
   }
 }
 
-/// ConditionalBuilder(
-//               condition: SocialCubit.get(context).model != null,
-//               builder: (context) {
-//                 var model = SocialCubit.get(context).model;
-//                 return  Column(
-//                   children: [
-//                     if(!(FirebaseAuth.instance.currentUser!.emailVerified))
-//                     Container(
-//                       padding: const EdgeInsetsDirectional.symmetric(horizontal: 10.0),
-//                       decoration: BoxDecoration(
-//                         color: Colors.amber.shade200,
-//                         borderRadius: BorderRadiusDirectional.all(Radius.circular(7.0)),
-//                       ),
-//
-//                       child: Row(
-//                         children: [
-//                           Icon(Icons.warning_amber),
-//                           SizedBox(width: 15.0),
-//                           Text('Please Verify Your Email'),
-//                           Spacer(),
-//                           defaultTextButton(
-//                             text: 'verify email',
-//                             function: (){
-//                               FirebaseAuth.instance.currentUser
-//                                   ?.sendEmailVerification()
-//                                   .then((value) {
-//                                     showToast(message: 'check your mail', state: ToastStates.SUCCESS);
-//                               }).catchError((error){
-//                                 showToast(message: 'check your internet connection', state: ToastStates.NOTIFY);
-//                               });
-//                             },
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   ],
-//                 );
-//               },
-//               fallback: (context) => const Center(child: CircularProgressIndicator()),
-//
-//             )
