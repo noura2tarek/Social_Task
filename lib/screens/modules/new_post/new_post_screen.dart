@@ -65,16 +65,17 @@ class NewPostScreen extends StatelessWidget {
                 Row(
                   children: [
                     CircleAvatar(
-                      radius: 25.0,
+                      radius: 26.0,
                       child: ClipOval(
-                        child: Container(
-                          child: CachedNetworkImage(
-                            imageUrl: userModel!.image!,
-                            placeholder: (context, url) =>
-                                Container(color: Colors.grey[300]),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          height: 60.0,
+                          width: 60.0,
+                          imageUrl: userModel!.image!,
+                          placeholder: (context, url) =>
+                              Container(color: Colors.grey[300]),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
                         ),
                       ),
                     ),

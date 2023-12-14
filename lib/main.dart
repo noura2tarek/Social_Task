@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:social_app/core/controllers/login_bloc/login_cubit.dart';
 import 'package:social_app/core/controllers/register_bloc/register_cubit.dart';
 import 'package:social_app/core/managers/app_strings.dart';
@@ -18,6 +17,8 @@ import 'core/styles/themes/theme_data_light.dart';
 
 Future<void> main()  async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Initialize firebase
+  await Firebase.initializeApp();
 
   // //check internet
   // bool result = await InternetConnectionChecker().hasConnection;
@@ -49,18 +50,14 @@ Future<void> main()  async {
     startingWidget = LoginScreen();
   }
 
-  // Initialize firebase
-  await Firebase.initializeApp();
-
-  runApp(MyApp(
+  runApp( MyApp(
     isDarkk: isDarkTheme,
   ));
 }
 
 class MyApp extends StatelessWidget {
   final bool? isDarkk;
-
-  MyApp({super.key, required this.isDarkk});
+  const MyApp({super.key, required this.isDarkk});
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +66,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => SocialCubit()
             ..setMode(fromShared: isDarkk)
-            ..getPosts()
             ..getUserData(userId: uId)
+            ..getPosts()
             ..getAllUsers(),
         ),
         BlocProvider(

@@ -9,7 +9,7 @@ ThemeData lightTheme =  ThemeData(
   cardTheme: CardTheme(
     elevation: 4.0,
     color: Colors.white.withOpacity(0.8),
-    surfaceTintColor: Colors.white,
+    surfaceTintColor: Colors.blue,
   ),
 
   useMaterial3: true,

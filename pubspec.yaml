@@ -35,9 +35,9 @@ dependencies:
   shared_preferences: ^2.2.0
   fluttertoast: ^8.2.2
   carousel_slider: ^4.2.1
-  basic_utils: ^5.6.1
+  basic_utils: ^5.5.4
   intl: ^0.19.0
-  image_picker: ^1.0.2
+  image_picker: ^1.0.5
   desktop_window: ^0.4.0
   responsive_builder: ^0.7.0
   smooth_page_indicator: ^1.1.0
@@ -48,10 +48,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   #Firebase
   firebase_core: ^2.24.2
-  flutterfire_cli: ^0.1.1+2
-  firebase_auth: ^4.7.3
-  cloud_firestore: ^4.8.5
-  firebase_storage: ^11.2.6
+  flutterfire_cli: ^0.2.7
+  firebase_auth: ^4.15.3
+  cloud_firestore: ^4.13.6
+  firebase_storage: ^11.5.6
+  firebase_messaging: ^14.7.9
 
 
   flutter:

@@ -10,6 +10,7 @@ class AppStrings {
   static const home = 'Home';
   static const chats = 'Chats';
   static const post = 'post';
+  static const postc = 'Post';
   static const posts = 'posts';
   static const like = 'like';
   static const likes = 'likes';
@@ -21,6 +22,9 @@ class AppStrings {
   static const addPost = 'Add Post';
   static const userName = 'userName';
   static const profile = 'Profile';
+  static const logOut = 'Log out';
+  static const language = 'Language';
+  static const darkMod = 'Dark Mode';
   static const dateTime = 'dateTime';
   static const usersPhotos = 'usersPhotos';
   static const postsPhotos = 'postsPhotos';

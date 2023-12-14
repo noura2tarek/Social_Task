@@ -81,31 +81,33 @@ class FeedsScreen extends StatelessWidget {
             );
           },
           fallback: (context) {
-            if (state is SocialGetPostsLoadingState) {
+            if (state is SocialGetUserLoadingState || state is SocialGetPostsLoadingState ||state is SocialGetAllUsersLoadingState ) {
               return const Center(child: CircularProgressIndicator());
-            }
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.menu,
-                    color: isDark ? Colors.grey[400] : Colors.black45,
-                    //black 45 for light theme , grey[400] for dark
-                    size: 100.0,
-                  ),
-                  Text(
-                    AppStrings.noPostsYet,
-                    style: TextStyle(
+            } else {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.menu,
                       color: isDark ? Colors.grey[400] : Colors.black45,
-                      //change color here according to theme mode
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+                      //black 45 for light theme , grey[400] for dark
+                      size: 100.0,
                     ),
-                  ),
-                ],
-              ),
-            );
+                    Text(
+                      AppStrings.noPostsYet,
+                      style: TextStyle(
+                        color: isDark ? Colors.grey[400] : Colors.black45,
+                        //change color here according to theme mode
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
           },
         );
       },

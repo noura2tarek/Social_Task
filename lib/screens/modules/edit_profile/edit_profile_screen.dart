@@ -1,7 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../core/controllers/bloc/cubit.dart';
 import '../../../core/controllers/bloc/states.dart';
 import '../../../core/managers/values.dart';
@@ -116,6 +115,7 @@ class EditProfileScreen extends StatelessWidget {
                               ],
                             ),
                           ),
+                          //profile image
                           Align(
                             alignment: AlignmentDirectional.bottomCenter,
                             child: Stack(

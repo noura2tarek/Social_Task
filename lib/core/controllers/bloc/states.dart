@@ -92,9 +92,9 @@ class SocialUpdatePostErrorState extends SocialStates{}
 //Delete Posts
 class SocialDeletePostsLoadingState extends SocialStates{}
 
-class SocialDeletePostsSuccessState extends SocialStates{}
+class SocialDeletePostSuccessState extends SocialStates{}
 
-class SocialDeletePostsErrorState extends SocialStates{}
+class SocialDeletePostErrorState extends SocialStates{}
 
 //Get user visit Posts
 class SocialGetUserVisitPostsLoadingState extends SocialStates{}

@@ -234,7 +234,7 @@ class RegisterScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(AppStrings.haveAccount),
+                          const Text(AppStrings.haveAccount, style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.normal),),
                           DefaultTextButton(
                             function: () {
                               navigateAndRemove(context: context,widget: LoginScreen());

@@ -57,13 +57,13 @@ class HomeLayout extends StatelessWidget {
                 icon: Icon(
                   IconBroken.Paper_Upload,
                 ),
-                label: AppStrings.post,
+                label: AppStrings.postc,
               ),
               BottomNavigationBarItem(
                 icon: Icon(
                   IconBroken.Location,
                 ),
-                label: AppStrings.users,
+                label: AppStrings.usersc,
               ),
               BottomNavigationBarItem(
                 icon: Icon(

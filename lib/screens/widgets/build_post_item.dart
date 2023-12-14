@@ -10,7 +10,7 @@ import '../../models/post_model.dart';
 
 import '../modules/visit_profile/visit_profile_screen.dart';
 import 'components.dart';
-
+// any user post
 Widget buildPostItem({
   required PostModel model,
   required BuildContext context,
@@ -27,6 +27,7 @@ Widget buildPostItem({
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // Photo of the user who post
               InkWell(
                 onTap: () {
                   VisitCubit.get(context)
@@ -38,14 +39,15 @@ Widget buildPostItem({
                 child: CircleAvatar(
                   radius: 22.0,
                   child: ClipOval(
-                    child: Container(
-                      child: CachedNetworkImage(
-                        imageUrl: model.image,
-                        placeholder: (context, url) =>
-                            Container(color: Colors.grey[300]),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      ),
+                    child: CachedNetworkImage(
+                      width: 100.0,
+                      height: 100.0,
+                      fit: BoxFit.cover,
+                      imageUrl: model.image,
+                      placeholder: (context, url) =>
+                          Container(color: Colors.grey[300]),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
                   ),
                 ),
@@ -79,6 +81,7 @@ Widget buildPostItem({
                       ),
                     ],
                   ),
+                  // The data of the post
                   Text(
                     model.dateTime,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -163,7 +166,10 @@ Widget buildPostItem({
           //       ),
           //     ],
           //   ),
-          // ), //wrap of hashtags
+          // ),
+          // wrap of hashtags
+
+          ///////** Post Image **/////////
           if (model.postImage != '')
             Padding(
               padding: const EdgeInsets.only(top: 15.0),
@@ -175,6 +181,7 @@ Widget buildPostItem({
                       const BorderRadiusDirectional.all(Radius.circular(5.0)),
                 ),
                 child: CachedNetworkImage(
+                  fit: BoxFit.cover,
                   imageUrl: model.postImage,
                   placeholder: (context, url) =>
                       Container(color: Colors.grey[300]),
@@ -264,6 +271,9 @@ Widget buildPostItem({
                           child: ClipOval(
                             child: Container(
                               child: CachedNetworkImage(
+                                height: 100.0,
+                                width: 100.0,
+                                fit: BoxFit.cover,
                                 imageUrl: model.image,
                                 placeholder: (context, url) =>
                                     Container(color: Colors.grey[300]),
@@ -337,4 +347,406 @@ Widget buildPostItem({
       ),
     ),
   );
+}
+
+// current user post
+Widget buildUserPostItem({
+  required PostModel model,
+  required BuildContext context,
+  required int index,
+}) {
+  return Card(
+    clipBehavior: Clip.antiAliasWithSaveLayer,
+    margin: const EdgeInsetsDirectional.symmetric(horizontal: 10.0),
+    child: Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Photo of the user who post
+              InkWell(
+                onTap: () {
+                  VisitCubit.get(context)
+                      .getUserVisitData(userId: model.uId)
+                      .then((value) {
+                    navigateTo(context: context, widget: VisitProfileScreen());
+                  });
+                },
+                child: CircleAvatar(
+                  radius: 22.0,
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      width: 100.0,
+                      height: 100.0,
+                      fit: BoxFit.cover,
+                      imageUrl: model.image,
+                      placeholder: (context, url) =>
+                          Container(color: Colors.grey[300]),
+                      errorWidget: (context, url, error) =>
+                      const Icon(Icons.error),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 15.0,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        model.name,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          height: 1.6,
+                          color: isDark
+                              ? Colors.white
+                              : Colors
+                              .black, // change color here according to theme mode.
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 2.0,
+                      ),
+                      const Icon(
+                        Icons.check_circle,
+                        color: AppColors.defaultColor,
+                        size: 16.0,
+                      ),
+                    ],
+                  ),
+                  // The data of the post
+                  Text(
+                    model.dateTime,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      //change color here according to theme
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              IconButton(
+                onPressed: () {
+                  showAlertDialog(context: context, postId: SocialCubit.get(context).postsIds[index]);
+
+                },
+                icon: Icon(
+                  Icons.more_horiz_sharp,
+                  size: 22.0,
+                  color: isDark
+                      ? Colors.grey[350]
+                      : Colors
+                      .black, // change color here according to theme mode
+                ),
+              ),
+            ],
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(top: 13.0),
+            child: Text(
+              model.text,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
+          //the tags below
+
+          // Container(
+          //   width: double.infinity,
+          //   padding: const EdgeInsetsDirectional.only(top: 5.0, bottom: 10.0),
+          //   child: Wrap(
+          //     children: [
+          //       Container(
+          //         child: MaterialButton(
+          //           onPressed: () {},
+          //           minWidth: 1.2,
+          //           textColor: Colors.blue,
+          //           padding: EdgeInsets.zero,
+          //           child: Text('#software'),
+          //         ),
+          //         height: 25.0,
+          //         padding: EdgeInsetsDirectional.only(end: 5.0),
+          //       ),
+          //       Container(
+          //         child: MaterialButton(
+          //           onPressed: () {},
+          //           minWidth: 1.2,
+          //           textColor: Colors.blue,
+          //           padding: EdgeInsets.zero,
+          //           child: Text('#flutter'),
+          //         ),
+          //         height: 25.0,
+          //         padding: EdgeInsetsDirectional.only(end: 5.0),
+          //       ),
+          //       Container(
+          //         child: MaterialButton(
+          //           onPressed: () {},
+          //           minWidth: 1.2,
+          //           textColor: Colors.blue,
+          //           padding: EdgeInsets.zero,
+          //           child: Text('#mobile_development'),
+          //         ),
+          //         height: 25.0,
+          //         padding: EdgeInsetsDirectional.only(end: 5.0),
+          //       ),
+          //       Container(
+          //         child: MaterialButton(
+          //           onPressed: () {},
+          //           minWidth: 1.2,
+          //           textColor: Colors.blue,
+          //           padding: EdgeInsets.zero,
+          //           child: Text('#software_development'),
+          //         ),
+          //         height: 25.0,
+          //         padding: EdgeInsetsDirectional.only(end: 5.0),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // wrap of hashtags
+
+          ///////** Post Image **/////////
+          if (model.postImage != '')   //image of post
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0),
+              child: Container(
+                width: double.infinity,
+                height: 150.0,
+                decoration: const BoxDecoration(
+                  borderRadius:
+                  BorderRadiusDirectional.all(Radius.circular(5.0)),
+                ),
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  imageUrl: model.postImage,
+                  placeholder: (context, url) =>
+                      Container(color: Colors.grey[300]),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
+              ),
+            ),
+          const SizedBox(
+            height: 15.0,
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(top: 7.0),
+            child: InkWell(
+              onTap: () {},
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Icon(
+                            IconBroken.Heart,
+                            color: Colors.red,
+                            size: 18.0,
+                          ),
+                          const SizedBox(width: 4.0),
+                          Expanded(
+                            child: Text(
+                              '${SocialCubit.get(context).postsLikes[index]}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ), // caption style replaced by bodySmall
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        const Icon(
+                          IconBroken.Chat,
+                          color: Colors.amber,
+                          size: 18.0,
+                        ),
+                        const SizedBox(width: 4.0),
+                        Text(
+                          '0 comments',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ), // caption style replaced by bodySmall
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5.0),
+                          child: CircleAvatar(
+                            radius: 1.6,
+                            backgroundColor: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          '0 shares',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ), // caption style replaced by bodySmall
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // InkWell of Row of likes, comments, and shares
+          Divider(
+            color: Theme.of(context).dividerTheme.color,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                          radius: 16.0,
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              height: 100.0,
+                              width: 100.0,
+                              fit: BoxFit.cover,
+                              imageUrl: model.image,
+                              placeholder: (context, url) =>
+                                  Container(color: Colors.grey[300]),
+                              errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                            ),
+                          )),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Text(
+                        'Write a comment...',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  SocialCubit.get(context).likePost(
+                      postId: SocialCubit.get(context).postsIds[index],
+                      index: index,
+                      userID: SocialCubit.get(context).userModel!.uId!);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 7.0),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        IconBroken.Heart,
+                        color: Colors.red,
+                        size: 18.0,
+                      ),
+                      const SizedBox(width: 6.0),
+                      Text(
+                        AppStrings.like,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ), // caption style replaced by bodySmall
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 17.0,
+              ),
+              InkWell(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 7.0),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        IconBroken.Upload,
+                        color: Colors.green,
+                        size: 18.0,
+                      ),
+                      const SizedBox(width: 6.0),
+                      Text(
+                        'Share',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ), // caption style replaced by bodySmall
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+
+////// Alert Dialog ////////
+void showAlertDialog({
+  required BuildContext context,
+  required String postId,
+}) {
+// Set up the buttons
+  Widget cancelButton = MaterialButton(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    color: Colors.grey,
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+    child: const Text(
+      'Cancel',
+      style: TextStyle(color: Colors.white),
+    ),
+  );
+  Widget continueButton = MaterialButton(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    color: AppColors.defaultColor,
+    onPressed: () {
+      SocialCubit.get(context).deletePost(postId: postId);
+      Navigator.of(context).pop(true);
+    },
+    child: const Text(
+      'Delete',
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+  );
+
+  // Set up the alert dialog
+  AlertDialog alert = AlertDialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    title: const Text(
+      'Delete Post',
+    ),
+    content:  Text(
+      'Are you sure?',
+      style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 14.0),
+    ),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+  showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      });
 }

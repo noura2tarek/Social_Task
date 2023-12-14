@@ -199,7 +199,7 @@ class SocialCubit extends Cubit<SocialStates> {
     emit(SocialUpdateUserDataLoadingState());
     UserModel model = UserModel(
       name: name,
-      email: email ?? userModel!.email,
+      email: email,
       phone: phone,
       uId: userModel!.uId,
       isEmailVerified: isEmailVerified,
@@ -211,36 +211,15 @@ class SocialCubit extends Cubit<SocialStates> {
       noOfFollowing: userModel!.noOfFollowing,
       noOfFriends: userModel!.noOfFriends,
     );
-    if (email == null) {
-      FirebaseFirestore.instance
-          .collection(AppStrings.users)
-          .doc(userModel?.uId)
-          .update(model.toMap())
-          .then((value) {
-        //getAllUsers();
-        emit(SocialUpdateUserDataSuccessState()); // we may delete that
-      }).catchError((error) {
-        emit(SocialUpdateUserDataErrorState());
-      });
-    } else {
-      FirebaseAuth.instance.currentUser?.updateEmail(email).then((value) {
-        FirebaseFirestore.instance
-            .collection(AppStrings.users)
-            .doc(userModel?.uId)
-            .update(model.toMap())
-            .then((value) {
-          //getAllUsers();
-          emit(SocialUpdateUserDataSuccessState()); // we may delete that
-        }).catchError((error) {
-          emit(SocialUpdateUserDataErrorState());
-        });
-      }).catchError((error) {
-        showToast(
-          message: error.toString(),
-          state: ToastStates.ERROR,
-        );
-      });
-    }
+    FirebaseFirestore.instance
+        .collection(AppStrings.users)
+        .doc(userModel?.uId)
+        .update(model.toMap())
+        .then((value) {
+      emit(SocialUpdateUserDataSuccessState()); // we may delete that
+    }).catchError((error) {
+      emit(SocialUpdateUserDataErrorState());
+    });
   }
 
   //get postImage from gallery for post
@@ -343,12 +322,16 @@ class SocialCubit extends Cubit<SocialStates> {
             .collection(AppStrings.likes)
             .snapshots()
             .listen((value) {
-          postsLikes.add(value.docs
-              .map((element) => element.data().containsValue(true))
-              .toList()
-              .length);
-          posts.add(PostModel.fromJson(element.data()));
-          postsIds.add(element.id);
+          postsLikes.add(value.docs.length);
+
+          if (!posts.contains(PostModel.fromJson(element.data()))) {
+            posts.add(PostModel.fromJson(element.data()));
+          }
+
+          if (!postsIds.contains(element.id)) {
+            postsIds.add(element.id);
+          }
+
           if (element.data().containsValue(userModel?.uId)) {
             userPosts.add(PostModel.fromJson(element.data()));
           }
@@ -393,9 +376,10 @@ class SocialCubit extends Cubit<SocialStates> {
         .doc(postId)
         .delete()
         .then((value) {
-      emit(SocialDeletePostsSuccessState());
+          
+      emit(SocialDeletePostSuccessState());
     }).catchError((error) {
-      emit(SocialDeletePostsErrorState());
+      emit(SocialDeletePostErrorState());
     });
   }
 
@@ -409,14 +393,32 @@ class SocialCubit extends Cubit<SocialStates> {
         .collection(AppStrings.posts)
         .doc(postId)
         .collection(AppStrings.likes)
-        .doc(userID)
-        .set({
-      AppStrings.like: true,
-      AppStrings.userName: userModel?.name,
-    }).then((value) {
-      emit(SocialPostLikeSuccessState());
-    }).catchError((error) {
-      emit(SocialPostLikeErrorState());
+        .get()
+        .then((value) {
+      for (var element in value.docs) {
+        if (element.id == userID) {
+          FirebaseFirestore.instance
+              .collection(AppStrings.posts)
+              .doc(postId)
+              .collection(AppStrings.likes)
+              .doc(userID)
+              .delete();
+        } else {
+          FirebaseFirestore.instance
+              .collection(AppStrings.posts)
+              .doc(postId)
+              .collection(AppStrings.likes)
+              .doc(userID)
+              .set({
+            AppStrings.like: true,
+            AppStrings.userName: userModel?.name,
+          }).then((value) {
+            emit(SocialPostLikeSuccessState());
+          }).catchError((error) {
+            emit(SocialPostLikeErrorState());
+          });
+        }
+      }
     });
   }
 

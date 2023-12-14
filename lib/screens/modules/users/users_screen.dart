@@ -55,14 +55,15 @@ class UsersScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: 26.0,
                   child: ClipOval(
-                    child: Container(
-                      child: CachedNetworkImage(
-                        imageUrl: model.image!,
-                        placeholder: (context, url) =>
-                            Container(color: Colors.grey[300]),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      ),
+                    child: CachedNetworkImage(
+                      height: 100.0,
+                      width: 100.0,
+                      fit: BoxFit.cover,
+                      imageUrl: model.image!,
+                      placeholder: (context, url) =>
+                          Container(color: Colors.grey[300]),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
                   ),
                 ),
