@@ -7,9 +7,10 @@ import '../../core/managers/values.dart';
 import '../../core/styles/colors.dart';
 import '../../core/styles/icon_broken.dart';
 import '../../models/post_model.dart';
-
 import '../modules/visit_profile/visit_profile_screen.dart';
 import 'components.dart';
+
+
 // any user post
 Widget buildPostItem({
   required PostModel model,
@@ -348,6 +349,8 @@ Widget buildPostItem({
     ),
   );
 }
+
+
 
 // current user post
 Widget buildUserPostItem({
@@ -695,6 +698,7 @@ void showAlertDialog({
   required BuildContext context,
   required String postId,
 }) {
+
 // Set up the buttons
   Widget cancelButton = MaterialButton(
     shape: RoundedRectangleBorder(
