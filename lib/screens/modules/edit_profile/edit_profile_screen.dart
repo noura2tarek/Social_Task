@@ -11,6 +11,7 @@ import '../../widgets/default_text_button.dart';
 
 class EditProfileScreen extends StatelessWidget {
   EditProfileScreen({super.key});
+
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final bioController = TextEditingController();
