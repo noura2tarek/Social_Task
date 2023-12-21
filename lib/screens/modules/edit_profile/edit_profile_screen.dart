@@ -9,9 +9,8 @@ import '../../widgets/default_app_bar.dart';
 import '../../widgets/default_form_field.dart';
 import '../../widgets/default_text_button.dart';
 
-
 class EditProfileScreen extends StatelessWidget {
-  EditProfileScreen({Key? key}) : super(key: key);
+  EditProfileScreen({super.key});
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final bioController = TextEditingController();
@@ -26,10 +25,10 @@ class EditProfileScreen extends StatelessWidget {
         var profileImage = SocialCubit.get(context).profileImage;
         var coverPickedImage = SocialCubit.get(context).coverImage;
 
-          nameController.text = (userModel?.name) ?? '';
-          bioController.text = (userModel?.bio) ?? '';
-          phoneController.text = (userModel?.phone) ?? '';
-          emailController.text = (userModel?.email) ?? '';
+        nameController.text = (userModel?.name) ?? '';
+        bioController.text = (userModel?.bio) ?? '';
+        phoneController.text = (userModel?.phone) ?? '';
+        emailController.text = (userModel?.email) ?? '';
 
         // bool? isEmailVerified = FirebaseAuth.instance.currentUser?.emailVerified;
         return Scaffold(
@@ -64,7 +63,7 @@ class EditProfileScreen extends StatelessWidget {
                         padding: EdgeInsets.only(bottom: 10.0),
                         child: LinearProgressIndicator(),
                       ),
-                    Container(
+                    SizedBox(
                       height: 220.0,
                       child: Stack(
                         children: [
@@ -81,10 +80,10 @@ class EditProfileScreen extends StatelessWidget {
                                       fit: BoxFit.cover,
                                       image: coverPickedImage == null
                                           ? NetworkImage(
-                                        userModel!.coverImage!,
-                                      )
+                                              userModel!.coverImage!,
+                                            )
                                           : FileImage(coverPickedImage)
-                                      as ImageProvider,
+                                              as ImageProvider,
                                     ),
                                   ),
                                 ),
@@ -93,17 +92,21 @@ class EditProfileScreen extends StatelessWidget {
                                       bottom: 8.0, right: 8.0),
                                   child: CircleAvatar(
                                     radius: 19.0,
-                                    backgroundColor:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                    backgroundColor: Theme.of(context)
+                                        .scaffoldBackgroundColor,
                                     child: CircleAvatar(
-                                      backgroundColor: isDark? Colors.grey[400] :Colors.grey[350], //change color here according to theme mode
+                                      backgroundColor: isDark
+                                          ? Colors.grey[400]
+                                          : Colors.grey[350],
+                                      //change color here according to theme mode
                                       radius: 17.0,
                                       child: IconButton(
                                         onPressed: () {
-                                          SocialCubit.get(context).getCoverImage();
+                                          SocialCubit.get(context)
+                                              .getCoverImage();
                                         },
                                         splashRadius: 21.0,
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.camera_alt_outlined,
                                           color: Colors.black,
                                           size: 20.0,
@@ -124,14 +127,15 @@ class EditProfileScreen extends StatelessWidget {
                                 CircleAvatar(
                                   radius: 61.0,
                                   backgroundColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   child: CircleAvatar(
                                     radius: 58.0,
                                     backgroundImage: profileImage == null
                                         ? NetworkImage(
-                                      userModel!.image!,
-                                    )
-                                        : FileImage(profileImage) as ImageProvider,
+                                            userModel!.image!,
+                                          )
+                                        : FileImage(profileImage)
+                                            as ImageProvider,
                                   ),
                                 ),
                                 Padding(
@@ -139,18 +143,21 @@ class EditProfileScreen extends StatelessWidget {
                                       bottom: 0.0, right: 0.0),
                                   child: CircleAvatar(
                                     radius: 19.0,
-                                    backgroundColor:
-                                    Theme.of(context).scaffoldBackgroundColor,
+                                    backgroundColor: Theme.of(context)
+                                        .scaffoldBackgroundColor,
                                     child: CircleAvatar(
                                       radius: 17.0,
-                                      backgroundColor: isDark? Colors.grey[400] :Colors.grey[350], //change color here according to theme mode
+                                      backgroundColor: isDark
+                                          ? Colors.grey[400]
+                                          : Colors.grey[350],
+                                      //change color here according to theme mode
                                       child: IconButton(
                                         onPressed: () {
                                           SocialCubit.get(context)
                                               .getProfileImage();
                                         },
                                         splashRadius: 20.0,
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.camera_alt_outlined,
                                           color: Colors.black,
                                           size: 20.0,
@@ -168,29 +175,39 @@ class EditProfileScreen extends StatelessWidget {
                     const SizedBox(
                       height: 20.0,
                     ),
+                    ////////   Editing Data   ////////
                     Padding(
                       padding: const EdgeInsets.only(
                           bottom: 20.0, left: 20.0, right: 20.0),
                       child: Row(
                         children: [
-                          Container(
+                          SizedBox(
                             width: 75.0,
                             child: Text(
                               'Name:',
-                              style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontSize: 18.0,
-                                color: isDark? Colors.white :Colors.black, // change color here according to theme mode
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                    fontSize: 18.0,
+                                    color: isDark
+                                        ? Colors.white
+                                        : Colors
+                                            .black, // change color here according to theme mode
+                                  ),
                             ),
                           ),
                           Expanded(
-                            child: Container(
+                            child: SizedBox(
                               height: 56.0,
                               child: DefaultFormField(
-                                style: Theme.of(context).inputDecorationTheme.labelStyle?.copyWith(
-                                  fontSize: 15.0,
-                                ),
+                                border: const UnderlineInputBorder(),
+                                style: Theme.of(context)
+                                    .inputDecorationTheme
+                                    .labelStyle
+                                    ?.copyWith(
+                                      fontSize: 15.0,
+                                    ),
                                 type: TextInputType.text,
                                 controller: nameController,
                                 preficon: IconBroken.Profile,
@@ -206,25 +223,34 @@ class EditProfileScreen extends StatelessWidget {
                           bottom: 20.0, left: 20.0, right: 20.0),
                       child: Row(
                         children: [
-                          Container(
+                          SizedBox(
+                            width: 75.0,
                             child: Text(
                               'Bio:',
-                              style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontSize: 18.0,
-                                color: isDark? Colors.white :Colors.black, // change color here according to theme mode
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                    fontSize: 18.0,
+                                    color: isDark
+                                        ? Colors.white
+                                        : Colors
+                                            .black, // change color here according to theme mode
+                                  ),
                             ),
-                            width: 75.0,
                           ),
                           Expanded(
-                            child: Container(
+                            child: SizedBox(
                               height: 56.0,
                               child: DefaultFormField(
-                                style: Theme.of(context).inputDecorationTheme.labelStyle?.copyWith(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.normal,
-                                ),
+                                border: const UnderlineInputBorder(),
+                                style: Theme.of(context)
+                                    .inputDecorationTheme
+                                    .labelStyle
+                                    ?.copyWith(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
                                 type: TextInputType.text,
                                 preficon: IconBroken.Info_Circle,
                                 controller: bioController,
@@ -239,25 +265,34 @@ class EditProfileScreen extends StatelessWidget {
                           bottom: 20.0, left: 20.0, right: 20.0),
                       child: Row(
                         children: [
-                          Container(
+                          SizedBox(
+                            width: 75.0,
                             child: Text(
                               'Phone:',
-                              style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontSize: 18.0,
-                                color: isDark? Colors.white :Colors.black, // change color here according to theme mode
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                    fontSize: 18.0,
+                                    color: isDark
+                                        ? Colors.white
+                                        : Colors
+                                            .black, // change color here according to theme mode
+                                  ),
                             ),
-                            width: 75.0,
                           ),
                           Expanded(
-                            child: Container(
+                            child: SizedBox(
                               height: 56.0,
                               child: DefaultFormField(
-                                style: Theme.of(context).inputDecorationTheme.labelStyle?.copyWith(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.normal,
-                                ),
+                                border: const UnderlineInputBorder(),
+                                style: Theme.of(context)
+                                    .inputDecorationTheme
+                                    .labelStyle
+                                    ?.copyWith(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
                                 type: TextInputType.phone,
                                 preficon: IconBroken.Call,
                                 controller: phoneController,
@@ -272,29 +307,37 @@ class EditProfileScreen extends StatelessWidget {
                           bottom: 20.0, left: 20.0, right: 20.0),
                       child: Row(
                         children: [
-                          Container(
+                          SizedBox(
                             width: 75.0,
                             child: Text(
                               'Email:',
-                              style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontSize: 18.0,
-                                color: isDark? Colors.white :Colors.black, // change color here according to theme mode
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                    fontSize: 18.0,
+                                    color: isDark
+                                        ? Colors.white
+                                        : Colors
+                                            .black, // change color here according to theme mode
+                                  ),
                             ),
                           ),
                           Expanded(
-                            child: Container(
+                            child: SizedBox(
                               height: 56.0,
                               child: TextFormField(
                                 controller: emailController,
-                                style: Theme.of(context).inputDecorationTheme.labelStyle?.copyWith(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.normal,
-                                ),
+                                style: Theme.of(context)
+                                    .inputDecorationTheme
+                                    .labelStyle
+                                    ?.copyWith(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
+                                  border: UnderlineInputBorder(),
                                   prefixIcon: Icon(Icons.email_outlined),
                                 ),
                               ),
@@ -303,15 +346,13 @@ class EditProfileScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
-
                   ],
                 ),
               );
             },
-           fallback: (context) {
-             return Container();
-           },
+            fallback: (context) {
+              return Container();
+            },
           ),
         );
       },

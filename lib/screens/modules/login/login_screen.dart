@@ -81,6 +81,7 @@ class LoginScreen extends StatelessWidget {
                       //////////////****** Text Form Fields *****//////////////
 
                       DefaultFormField(
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                         type: TextInputType.emailAddress,
                         controller: emailController,
                         label: AppStrings.emailAddress,
@@ -97,6 +98,7 @@ class LoginScreen extends StatelessWidget {
                         height: 15.0,
                       ),
                       DefaultFormField(
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                         type: TextInputType.visiblePassword,
                         controller: passwordController,
                         label: AppStrings.password,

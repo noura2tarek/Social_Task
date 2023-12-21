@@ -36,7 +36,7 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     height: 220.0,
                     child: Stack(
                       children: [

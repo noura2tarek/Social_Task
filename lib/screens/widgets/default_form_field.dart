@@ -19,12 +19,14 @@ class DefaultFormField extends StatelessWidget {
   final void Function(String)? onChange;
   final TextStyle? style;
   final bool isObsecure;
+  final InputBorder? border;
   final void Function()? onTab;
 
   const DefaultFormField({
     super.key,
     required this.type,
     required this.controller,
+    this.border,
     this.label,
     this.hint,
     this.preficon,
@@ -61,7 +63,7 @@ class DefaultFormField extends StatelessWidget {
             color: labelColor,
             fontSize: 14.0,
           ),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+          border: border,
           labelText: label,
           hintText: hint,
           hintStyle: TextStyle(

@@ -82,6 +82,7 @@ class RegisterScreen extends StatelessWidget {
 
                       ///////////////****** Text Form Fields *****////////////
                       DefaultFormField(
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                         type: TextInputType.name,
                         controller: nameController,
                         label: AppStrings.name,
@@ -98,6 +99,7 @@ class RegisterScreen extends StatelessWidget {
                         height: 24.0,
                       ),
                       DefaultFormField(
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                         type: TextInputType.emailAddress,
                         controller: emailController,
                         label: AppStrings.emailAddress,
@@ -116,6 +118,7 @@ class RegisterScreen extends StatelessWidget {
                         height: 24.0,
                       ),
                       DefaultFormField(
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                         type: TextInputType.visiblePassword,
                         controller: passwordController,
                         label: AppStrings.password,
@@ -141,6 +144,7 @@ class RegisterScreen extends StatelessWidget {
                       ),
 
                       DefaultFormField(
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                         type: TextInputType.visiblePassword,
                         controller: confirmPasswordController,
                         label: AppStrings.confirmPassword,
@@ -167,6 +171,7 @@ class RegisterScreen extends StatelessWidget {
                       ),
 
                       DefaultFormField(
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
                         type: TextInputType.phone,
                         controller: phoneController,
                         label: AppStrings.phone,
