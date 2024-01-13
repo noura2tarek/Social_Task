@@ -147,9 +147,9 @@ class ChatDetailsScreen extends StatelessWidget {
                               IconButton(
                                 padding: EdgeInsets.zero,
                                 onPressed: () {
-                                  // SocialCubit.get(context).getMessageImage(
-                                  //     dataTime: Timestamp.now(),
-                                  //     receiverId: receiverModel!.uId!);
+                                  SocialCubit.get(context).getMessageImage(
+                                      dataTime: Timestamp.now(),
+                                      receiverId: receiverModel!.uId!);
                                 },
                                 icon: const Icon(
                                   IconBroken.Image,
