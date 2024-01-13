@@ -106,7 +106,6 @@ class SocialGetUserVisitPostsErrorState extends SocialStates{}
 class SocialRemoveUserVisitPostsSuccessState extends SocialStates{}
 
 
-
 // like post
 class SocialPostLikeSuccessState extends SocialStates{}
 
@@ -121,10 +120,6 @@ class SocialDisPostLikeErrorState extends SocialStates{}
 //
 // class SocialChangePostLikeColorErrorState extends SocialStates{}
 
-//log out
-class SocialLogOutSuccessState extends SocialStates{}
-
-class SocialLogOutErrorState extends SocialStates{}
 
 //chat
 //send a message
@@ -135,6 +130,7 @@ class SocialSendMessageErrorState extends SocialStates{}
 class SocialGetMessageImageSuccessState extends SocialStates{}
 
 class SocialGetMessageImageErrorState extends SocialStates{}
+
 //upload message image
 class SocialUploadMessageImageSuccessState extends SocialStates{}
 

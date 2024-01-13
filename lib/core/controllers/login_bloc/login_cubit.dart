@@ -1,8 +1,9 @@
-import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../screens/widgets/components.dart';
+import '../../managers/app_strings.dart';
+import '../../network/local/cache_helper.dart';
 import 'login_states.dart';
 
 class SocialLoginCubit extends Cubit<SocialLoginStates> {
@@ -36,5 +37,17 @@ class SocialLoginCubit extends Cubit<SocialLoginStates> {
     icon =
         isPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined;
     emit(SocialpChangePasswordVisibilityState());
+  }
+
+//log out method
+  void logOut({required BuildContext context, required Widget widget}) {
+    FirebaseAuth.instance.signOut().then((value) {
+      CacheHelper.removeData(key: AppStrings.userIdKey).then((value) {
+        navigateAndRemove(context: context, widget: widget);
+      });
+      emit(LogOutSuccessState());
+    }).catchError((error) {
+      emit(LogOutErrorState());
+    });
   }
 }

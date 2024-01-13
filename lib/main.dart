@@ -15,7 +15,13 @@ import 'core/network/local/cache_helper.dart';
 import 'core/styles/themes/theme_data_dark.dart';
 import 'core/styles/themes/theme_data_light.dart';
 
-Future<void> main()  async {
+// //Handle background message (the app is closed or the app is running in the background)
+// Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   print("Handling a background message: ${message.messageId}");
+//   showToast(message: "Background message", state: ToastStates.SUCCESS);
+// }
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize firebase
   await Firebase.initializeApp();
@@ -28,8 +34,38 @@ Future<void> main()  async {
   //   showToast(message: AppStrings.checkInternet, state: ToastStates.NOTIFY);
   // }
 
+  //-------------------------//
+  //   FirebaseMessaging messaging = FirebaseMessaging.instance;
+//
+// // use the returned token to send messages to users from your custom server
+//   String? token = await messaging.getToken();
+//   print('token is $token');
+//   //token is c0tM5SrMRcqXZPJJafAGoN:APA91bEYitQWQL4XumxyXXb4zJsCmMIWMhEx4dRShuXzVfLr6gvnDG2Z2awqYu9ny0k1Gz-hkTdINwocJdE_59bbjJuP9z7eyIpy05ZNynTjZDShE5wWLHlkt6AuB9itHlgNdfKEcDXM
+//
+//   // Handle foreground messages (notification)
+//   //To listen to messages while your application is in the foreground (you are opening the application)
+//   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+//     print('Got a message in the foreground!');
+//     print('Message data: ${message.data}');
+//     showToast(message: "on message", state: ToastStates.SUCCESS);
+//     // if (message.notification != null) {
+//     //   print('Message also contained a notification: ${message.notification.toString()}');
+//     // }
+//   });
 
- Bloc.observer = MyBlocObserver();
+  // //Handle a message when the user clicked on the notification  (the app is running in the background)
+  // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  //   print('On MessageOpened App!');
+  //   print('Message data: ${message.data}');
+  //   showToast(message: "On message opened app", state: ToastStates.SUCCESS);
+  //   // if (message.notification != null) {
+  //   //   print('Message also contained a notification: ${message.notification.toString()}');
+  //   // }
+  // });
+  //
+  // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  Bloc.observer = MyBlocObserver();
   await CacheHelper.init();
   if (CacheHelper.checkData(key: AppStrings.userIdKey)) {
     uId = CacheHelper.getData(key: AppStrings.userIdKey) as String;
@@ -50,13 +86,14 @@ Future<void> main()  async {
     startingWidget = LoginScreen();
   }
 
-  runApp( MyApp(
+  runApp(MyApp(
     isDarkk: isDarkTheme,
   ));
 }
 
 class MyApp extends StatelessWidget {
   final bool? isDarkk;
+
   const MyApp({super.key, required this.isDarkk});
 
   @override

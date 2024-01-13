@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/core/controllers/login_bloc/login_cubit.dart';
+import 'package:social_app/core/controllers/login_bloc/login_states.dart';
 import '../../../core/controllers/bloc/cubit.dart';
 import '../../../core/controllers/bloc/states.dart';
 import '../../../core/managers/app_strings.dart';
@@ -10,8 +12,7 @@ import '../../widgets/default_app_bar.dart';
 import '../login/login_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
-   const SettingsScreen({super.key});
-
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +35,14 @@ class SettingsScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: Container(
-                      padding: const EdgeInsetsDirectional.symmetric(vertical: 15.0, horizontal: 15.0),
+                      padding: const EdgeInsetsDirectional.symmetric(
+                          vertical: 15.0, horizontal: 15.0),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: isDark? Colors.white38 : Colors.grey[700]!,
+                          color: isDark ? Colors.white38 : Colors.grey[700]!,
                         ),
-                        borderRadius: const BorderRadiusDirectional.all(Radius.circular(15.0)),
+                        borderRadius: const BorderRadiusDirectional.all(
+                            Radius.circular(15.0)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,14 +54,20 @@ class SettingsScreen extends StatelessWidget {
                               Icon(
                                 Icons.brightness_2_outlined,
                                 size: 24.0,
-                                color: isDark? Colors.grey[350] :Colors.black87, //change color here according the theme
+                                color: isDark
+                                    ? Colors.grey[350]
+                                    : Colors
+                                        .black87, //change color here according the theme
                               ),
                               const SizedBox(width: 7.0),
                               Text(
                                 AppStrings.darkMod,
                                 style: TextStyle(
                                   fontSize: 15.0,
-                                  color: isDark? Colors.grey[350] :Colors.black87, // change color here according to theme mode
+                                  color: isDark
+                                      ? Colors.grey[350]
+                                      : Colors
+                                          .black87, // change color here according to theme mode
                                 ),
                               ),
                               const Spacer(),
@@ -74,22 +83,29 @@ class SettingsScreen extends StatelessWidget {
                           ),
                           /********      change language button    **********/
                           InkWell(
-                            onTap: (){},
-                            borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+                            onTap: () {},
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(15.0)),
                             child: Padding(
-                              padding: const EdgeInsetsDirectional.only(end: 10.0, top: 10.0, bottom: 10.0),
+                              padding: const EdgeInsetsDirectional.only(
+                                  end: 10.0, top: 10.0, bottom: 10.0),
                               child: Row(
                                 children: [
                                   Icon(
                                     Icons.language_outlined,
                                     size: 24.0,
-                                    color: isDark? Colors.grey[350] :Colors.black87, //change color here according to theme
+                                    color: isDark
+                                        ? Colors.grey[350]
+                                        : Colors
+                                            .black87, //change color here according to theme
                                   ),
                                   const SizedBox(width: 7.0),
                                   Text(
                                     AppStrings.language,
                                     style: TextStyle(
-                                      color:  isDark? Colors.grey[350] :Colors.black87,
+                                      color: isDark
+                                          ? Colors.grey[350]
+                                          : Colors.black87,
                                       // change color here according to theme mode
                                       fontSize: 15.0,
                                     ),
@@ -104,42 +120,51 @@ class SettingsScreen extends StatelessWidget {
                   ),
 
                   /********      log out button    **********/
-                  InkWell(
-                    onTap: (){
-                      SocialCubit.get(context)
-                          .logOut(context: context, widget: LoginScreen());
+                  BlocConsumer<SocialLoginCubit, SocialLoginStates>(
+                    listener: (context, state) {},
+                    builder: (context, state) {
+                      return InkWell(
+                        onTap: () {
+                          SocialLoginCubit.get(context)
+                              .logOut(context: context, widget: LoginScreen());
+                        },
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            children: [
+                              Icon(
+                                IconBroken.Logout,
+                                size: 24.0,
+                                color: isDark
+                                    ? Colors.grey[350]
+                                    : Colors
+                                        .black87, //change color here according to theme
+                              ),
+                              const SizedBox(width: 7.0),
+                              Text(
+                                AppStrings.logOut,
+                                style: TextStyle(
+                                  color: isDark
+                                      ? Colors.grey[350]
+                                      : Colors.black87,
+                                  // cange color here according to theme mode
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
                     },
-                    borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            IconBroken.Logout,
-                            size: 24.0,
-                            color:  isDark? Colors.grey[350] :Colors.black87, //change color here according to theme
-                          ),
-                          const SizedBox(width: 7.0),
-                          Text(
-                            AppStrings.logOut,
-                            style: TextStyle(
-                              color: isDark? Colors.grey[350] :Colors.black87,
-                              // cange color here according to theme mode
-                              fontSize: 15.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
-
                 ],
               ),
             ),
           ),
         );
       },
-
     );
   }
 }

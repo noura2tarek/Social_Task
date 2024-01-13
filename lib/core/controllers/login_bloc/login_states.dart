@@ -1,19 +1,23 @@
-
 abstract class SocialLoginStates {}
 
-class SocialLoginInitialState extends SocialLoginStates{}
+class SocialLoginInitialState extends SocialLoginStates {}
 
-class SocialLoginLoadingState extends SocialLoginStates{}
+class SocialLoginLoadingState extends SocialLoginStates {}
 
-class SocialLoginSuccessState extends SocialLoginStates{
+class SocialLoginSuccessState extends SocialLoginStates {
   late String uId;
+
   SocialLoginSuccessState(this.uId);
-
-
 }
 
-class SocialLoginErrorState extends SocialLoginStates{
+class SocialLoginErrorState extends SocialLoginStates {
   late final String error;
+
   SocialLoginErrorState(this.error);
 }
-class SocialpChangePasswordVisibilityState extends SocialLoginStates{}
+
+class LogOutSuccessState extends SocialLoginStates {}
+
+class LogOutErrorState extends SocialLoginStates {}
+
+class SocialpChangePasswordVisibilityState extends SocialLoginStates {}

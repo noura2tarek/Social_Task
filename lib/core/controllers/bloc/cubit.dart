@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:social_app/core/controllers/bloc/states.dart';
 import 'package:social_app/models/post_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import '../../../models/message_model.dart';
 import '../../../models/user_model.dart';
 import '../../../screens/widgets/components.dart';
 import '../../managers/app_strings.dart';
@@ -108,6 +109,9 @@ class SocialCubit extends Cubit<SocialStates> {
       showToast(message: AppStrings.checkInternet, state: ToastStates.NOTIFY);
     });
   }
+
+  // delete account method (delete user using Firebase authentication) add it in settings
+  void deleteAccount() {}
 
   //get profileImage from gallery for profile
   File? profileImage;
@@ -376,7 +380,6 @@ class SocialCubit extends Cubit<SocialStates> {
         .doc(postId)
         .delete()
         .then((value) {
-          
       emit(SocialDeletePostSuccessState());
     }).catchError((error) {
       emit(SocialDeletePostErrorState());
@@ -422,8 +425,11 @@ class SocialCubit extends Cubit<SocialStates> {
     });
   }
 
-  Color likeColor(
-      {required String postId, required String userID, required bool isLike}) {
+  Color likeColor({
+    required String postId,
+    required String userID,
+    required bool isLike,
+  }) {
     Color color = Colors.grey;
     bool? like;
     if (isLike) {
@@ -450,15 +456,144 @@ class SocialCubit extends Cubit<SocialStates> {
     return color;
   }
 
-//log out method
-  void logOut({required BuildContext context, required Widget widget}) {
-    FirebaseAuth.instance.signOut().then((value) {
-      CacheHelper.removeData(key: AppStrings.userIdKey).then((value) {
-        navigateAndRemove(context: context, widget: widget);
-      });
-      emit(SocialLogOutSuccessState());
+  //------------- messages----------------- //
+ // Send message
+  void sendMessage({
+    required String receiverId,
+    required Timestamp dateTime,
+    String? text,
+    String? image,
+  }) {
+    MessageModel messageModel = MessageModel(
+      senderId: userModel!.uId!,
+      receiverId: receiverId,
+      text: text ?? '',
+      dateTime: dateTime,
+      image: image,
+    );
+    //send my chats to firestore
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel?.uId)
+        .collection('chats')
+        .doc(receiverId)
+        .collection('messages')
+        .add(messageModel.toMap())
+        .then((value) {
+      emit(SocialSendMessageSuccessState());
     }).catchError((error) {
-      emit(SocialLogOutErrorState());
+      emit(SocialSendMessageErrorState());
+    });
+    //send receiver chats to firestore
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(receiverId)
+        .collection('chats')
+        .doc(userModel?.uId)
+        .collection('messages')
+        .add(messageModel.toMap())
+        .then((value) {
+      emit(SocialSendMessageSuccessState());
+    }).catchError((error) {
+      emit(SocialSendMessageErrorState());
+    });
+  }
+
+  //Get messages
+  //this method will be called after before we enter char details screen with someone
+  List<MessageModel> messages = [];
+
+  void getMessages({required String receiverId}) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel?.uId)
+        .collection('chats')
+        .doc(receiverId)
+        .collection('messages')
+        .orderBy('dateTime')
+        .snapshots()
+        .listen((event) {
+      messages =
+          []; // every listen will duplicate data so, we should empty the list
+      event.docs.forEach((element) {
+        messages.add(MessageModel.fromJson(element.data()));
+      });
+      emit(SocialGetMessagesSuccessState());
+    });
+  }
+
+  //delete message for me (done for my message or the received message)
+  void deleteMessageForMe({required String receiverId}) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel?.uId)
+        .collection('chats')
+        .doc(receiverId)
+        .collection('messages')
+        .doc() //need this
+        .delete()
+        .then((value) {
+      emit(SocialDeleteMessageSuccessState());
+    }).catchError((error) {
+      emit(SocialDeleteMessageErrorState());
+    });
+  }
+
+  //delete message for everyone (done for my message)
+  void deleteMessageForEveryOne({required String receiverId}) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel?.uId)
+        .collection('chats')
+        .doc(receiverId)
+        .collection('messages')
+        .doc() // need this
+        .delete()
+        .then((value) {
+      emit(SocialDeleteMessageSuccessState());
+    }).catchError((error) {
+      emit(SocialDeleteMessageErrorState());
+    });
+  }
+
+  File? messageImage;
+  String? messageImageUrl;
+
+  Future<void> getMessageImage(
+      {required Timestamp dataTime, required String receiverId}) async {
+    XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      messageImage = File(pickedImage.path);
+
+      uploadMessageImage(dataTime: dataTime, receiverId: receiverId);
+      //emit(SocialGetMessageImageSuccessState());
+    } else {
+      print('No Image Selected');
+      emit(SocialGetMessageImageErrorState());
+    }
+  }
+
+  //upload pickedMessageImage file to firebase storage to store it
+  Future<void> uploadMessageImage({
+    required Timestamp dataTime,
+    required String receiverId,
+  }) async {
+    FirebaseStorage.instance
+        .ref()
+        .child(
+            'messagesPhotos/${Uri.file(messageImage!.path).pathSegments.last}')
+        .putFile(messageImage!)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        messageImageUrl = value;
+        //emit(SocialUploadMessageImageSuccessState());
+        sendMessage(
+            receiverId: receiverId, dateTime: dataTime, image: messageImageUrl);
+      }).catchError((error) {
+        emit(SocialUploadMessageImageErrorState());
+      });
+    }).catchError((error) {
+      emit(SocialUploadMessageImageErrorState());
     });
   }
 }
