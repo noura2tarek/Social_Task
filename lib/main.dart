@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:social_app/core/controllers/login_bloc/login_cubit.dart';
 import 'package:social_app/core/controllers/register_bloc/register_cubit.dart';
 import 'package:social_app/core/managers/app_strings.dart';
 import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/screens/modules/login/login_screen.dart';
+import 'package:social_app/screens/widgets/components.dart';
 import 'core/controllers/bloc_observer.dart';
 import 'core/controllers/bloc/cubit.dart';
 import 'core/controllers/bloc/states.dart';
@@ -26,13 +28,13 @@ Future<void> main() async {
   // Initialize firebase
   await Firebase.initializeApp();
 
-  // //check internet
-  // bool result = await InternetConnectionChecker().hasConnection;
-  // if (result == true) {
-  //   return;
-  // } else {
-  //   showToast(message: AppStrings.checkInternet, state: ToastStates.NOTIFY);
-  // }
+  //check internet
+  bool result = await InternetConnectionChecker().hasConnection;
+  if (result == true) {
+    return;
+  } else {
+    showToast(message: AppStrings.checkInternet, state: ToastStates.NOTIFY);
+  }
 
   //-------------------------//
   //   FirebaseMessaging messaging = FirebaseMessaging.instance;
